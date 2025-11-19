@@ -1,0 +1,127 @@
+:root{
+  --brown: #9A6B4A;           /* main earthy brown */
+  --brown-deep: #7F563C;      /* deeper accent */
+  --brown-soft: #B88C6A;      /* lighter accent */
+  --cream: #F5EEE7;           /* back paper */
+  --ink: #3B2B20;             /* readable text */
+  --bg: #FFF7F3;              /* page background */
+  --shadow: 0 10px 30px rgba(86,54,35,.25), 0 2px 6px rgba(86,54,35,.15);
+}
+* { box-sizing: border-box }
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--ink);
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+/* Ribbon pattern background (user-supplied image) */
+.bg{
+  position: fixed; inset: 0; z-index: -1; pointer-events:none;
+  background-image: url('assets/ribbons.png');
+  background-size: 420px auto; /* tweak size for density */
+  background-repeat: repeat;
+  opacity: .18; /* keep it soft */
+  filter: saturate(0.85) hue-rotate(-10deg);
+}
+
+.wrap{
+  min-height: 100dvh; /* mobile friendly */
+  max-width: 980px;
+  margin: 0 auto;
+  padding: clamp(16px, 4vw, 32px);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(12px, 2vw, 20px);
+  place-items: center;
+}
+
+.header{ text-align:center; }
+.header h1{
+  font-family: Caveat, cursive;
+  font-size: clamp(28px, 6vw, 56px);
+  line-height: 1.1;
+  margin: 8px 0 0;
+  color: var(--brown-deep);
+}
+.header .sub{
+  margin: 4px 0 0; opacity:.8; font-size: clamp(12px, 2.2vw, 16px);
+}
+
+.scene{
+  width: min(90vw, 560px);
+  aspect-ratio: 1 / 1;
+  perspective: 1200px;
+  display: grid;
+  place-items: center;
+}
+.card{
+  width: 100%; height: 100%; position: relative;
+  transform-style: preserve-3d;
+  transition: transform .9s cubic-bezier(.2,.8,.16,1), filter .5s;
+  cursor: pointer;
+}
+.card.is-open{ transform: rotateY(180deg); }
+
+.card__face{
+  position:absolute; inset:0; display:grid; place-items:center; padding: clamp(16px, 4vw, 32px);
+  -webkit-clip-path: url(#flowerClip);
+  clip-path: url(#flowerClip);
+  filter: drop-shadow(0 18px 30px rgba(61,40,24,.25)) drop-shadow(0 2px 6px rgba(61,40,24,.18));
+  backface-visibility: hidden;
+}
+
+.card__face--front{
+  background: radial-gradient(120% 120% at 20% 10%, #B98E6D 0%, #996C4B 55%, #7F563C 100%);
+  color: #fff;
+}
+.front-content{ text-align:center; transform: translateZ(20px); }
+.title{ margin: 8px 0 0; font-weight:700; letter-spacing:.02em; font-size: clamp(16px, 3.6vw, 22px); }
+.hint{ opacity:.9; font-size: clamp(12px, 2.4vw, 14px); margin: 2px 0 0 }
+.seal{
+  width: clamp(64px, 18vw, 110px); aspect-ratio: 1/1; display:grid; place-items:center;
+  background: radial-gradient(75% 75% at 35% 30%, #CFA98A 0%, #B98E6D 60%, #8E6447 100%);
+  border-radius: 50%; color:#fff; font-weight:700; font-size: clamp(28px, 8vw, 44px);
+  box-shadow: inset 0 4px 8px rgba(255,255,255,.3), inset 0 -6px 12px rgba(0,0,0,.25);
+}
+
+.card__face--back{
+  transform: rotateY(180deg);
+  background: var(--cream);
+}
+.paper{
+  width: 86%; height: 86%; background: linear-gradient(#fff, var(--cream));
+  border-radius: 20px; box-shadow: var(--shadow);
+  padding: clamp(16px, 4vw, 28px) clamp(14px, 3.2vw, 22px);
+  overflow: auto;
+}
+.paper h3{
+  font-family: Caveat, cursive;
+  color: var(--brown-deep);
+  font-size: clamp(22px, 5vw, 34px); margin: 0 0 6px;
+}
+.paper .letter{
+  white-space: pre-line; line-height: 1.6; font-size: clamp(13px, 2.8vw, 16px);
+}
+.paper .closing{ margin-top: 12px; font-size: clamp(12px, 2.4vw, 14px); color: #5a4332 }
+
+.footer{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center }
+.btn{
+  appearance:none; border:none; border-radius: 999px; padding: 10px 16px;
+  background: linear-gradient(180deg, var(--brown-soft), var(--brown));
+  color:#fff; font-weight:600; letter-spacing:.02em; cursor:pointer;
+  box-shadow: 0 8px 18px rgba(154,107,74,.3);
+}
+.btn:hover{ filter: brightness(.98) saturate(1.02) }
+.btn:active{ transform: translateY(1px) }
+.btn.ghost{ background: transparent; color: var(--brown-deep); box-shadow:none; outline:1px solid color-mix(in oklab, var(--brown) 40%, white); }
+
+/* Accessibility focus */
+.scene:focus{ outline: 3px dashed color-mix(in oklab, var(--brown) 60%, white); outline-offset: 6px }
+
+/* Small enhancements */
+@media (min-width: 720px){
+  .header .sub{ font-size: 14px }
+}
